@@ -1,0 +1,513 @@
+<template>
+  <div class="resume">
+    <div class="header card">
+      <div class="name">
+        <h1
+          contenteditable
+          v-text="name"
+        ></h1>
+        <h3
+          contenteditable
+          v-text="title"
+        ></h3>
+        <p
+          contenteditable
+          v-text="subTitle"
+        ></p>
+      </div>
+      <!-- <div class="contact">
+        <ul>
+          <li
+            contenteditable
+            v-for="(contact, index) in contacts"
+            :key="index"
+            v-text="contact"
+          ></li>
+        </ul>
+      </div> -->
+      <div class="image">
+        <input
+          type="file"
+          ref="fileInput"
+          @change="handleFileChange"
+        >
+        <img
+          :src="imageUrl"
+          v-if="imageUrl"
+        >
+      </div>
+    </div>
+    <!-- 个人信息 -->
+    <div class="infomation card">
+      <h2 class="card-title"><span contenteditable>个人信息</span><button
+          class="add"
+          @click="handleAdd({
+            name: 'infoList'
+          })"
+        >+</button></h2>
+      <div class="infoList">
+        <div
+          class="infor-item"
+          @dragenter="dragenter($event, index)"
+          @dragover="dragover($event, index)"
+          @dragstart="dragstart(index)"
+          draggable
+          v-for="(item, index) in infoList"
+          :key="item.id"
+        >
+          <span
+            contenteditable
+            v-text="item.title"
+          ></span>
+          <span
+            contenteditable
+            v-text="item.intro"
+          ></span>
+        </div>
+      </div>
+    </div>
+    <!-- 自我评价 -->
+    <div
+      class="summary card"
+      v-if="card.summary === 2"
+    >
+      <h2 class="card-title"><span contenteditable>自我评价</span><button
+          class="delete"
+          @click="handleDelete({
+            card: 'summary',
+            num: 0
+          })"
+        >+</button></h2>
+      <p
+        contenteditable
+        v-text="summary"
+      ></p>
+    </div>
+    <!-- 工作经历 -->
+    <div
+      class="company-card card"
+      v-if="card.company === 2"
+    >
+      <h2 class="card-title">
+        <span>工作经历</span>
+        <button
+          class="add"
+          @click="handleAdd({
+            name: 'companyList'
+          })"
+        >+</button>
+        <button
+          class="delete"
+          @click="handleDelete({
+            card: 'company',
+            num: 0
+          })"
+        >+</button>
+      </h2>
+      <div
+        class="company"
+        v-for="(company, index) in companyList"
+        :key="index"
+      >
+        <h3 class="company-title">
+          <span
+            contenteditable
+            v-text="company.company"
+          ></span>
+          <span
+            contenteditable
+            v-text="company.date"
+          ></span>
+          <span
+            contenteditable
+            v-text="company.title"
+          ></span>
+        </h3>
+        <ul>
+          <li
+            contenteditable
+            v-for="(task, index) in company.tasks"
+            :key="index"
+            v-text="task"
+          ></li>
+        </ul>
+      </div>
+    </div>
+    <!-- 项目经历 -->
+    <div
+      class="experience card"
+      v-if="card.experience === 2"
+    >
+      <h2 class="card-title"><span contenteditable>项目经历</span><button
+          class="add"
+          @click="handleAdd({
+            name: 'experienceList'
+          })"
+        >+</button></h2>
+      <div
+        class="projects"
+        v-for="(job, index) in experienceList"
+        :key="index"
+      >
+        <h3 class="project-title">
+          <span
+            contenteditable
+            v-text="job.title"
+          ></span>
+          <span
+            contenteditable
+            v-text="job.date"
+          ></span>
+          <span
+            contenteditable
+            v-text="job.company"
+          ></span>
+        </h3>
+        <ul>
+          <li
+            contenteditable
+            v-for="(task, index) in job.tasks"
+            :key="index"
+            v-text="task"
+          ></li>
+        </ul>
+      </div>
+    </div>
+    <!-- 教育经历 -->
+    <div class="education card">
+      <h2 class="card-title"><span contenteditable>教育经历</span><button
+          class="add"
+          @click="handleAdd({
+            name: 'educationList'
+          })"
+        >+</button></h2>
+      <div
+        class="degree"
+        v-for="(degree, index) in educationList"
+        :key="index"
+      >
+        <h3 class="degree-title">
+          <span
+            contenteditable
+            v-text="degree.school"
+          ></span>
+          <span
+            contenteditable
+            v-text="degree.degree"
+          ></span>
+          <span
+            contenteditable
+            v-text="degree.date"
+          ></span>
+        </h3>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "ResumeName",
+  data () {
+    return {
+      name: "姓名", // 姓名
+      title: "前端开发工程师", // 岗位
+      subTitle: '男 | 25岁 | 软件技术', // 重点信息
+      imageUrl: null, // 头像
+      summary: '掌握Web前端开发基本技能，熟悉W3C标准、页面布局架构、前端语义化、浏览器兼容性等，懂些审美，擅长设计，重视用户体验与代码可维护性，有近2年的前端开发经验。',
+      cardList: [{
+        cardName: '个人信息'
+      }],
+      infoList: [{
+        title: '性别：',
+        intro: '男',
+        id: 1
+      }, {
+        title: '学历：',
+        intro: '本科',
+        id: 2
+      }, {
+        title: '专业：',
+        intro: '软件工程',
+        id: 3
+      }, {
+        title: '经验：',
+        intro: '3年',
+        id: 4
+      }, {
+        title: '电话：',
+        intro: '18888888888',
+        id: 5
+      }, {
+        title: '邮箱：',
+        intro: '123456@163.com',
+        id: 6
+      }], // 个人信息
+      content: {
+        infoList: {
+          title: '项目：',
+          intro: '项目内容'
+        },
+        companyList: {
+          date: "2022.09-2023.03",
+          company: "深圳市XXX有限公司",
+          title: "前端开发工程师",
+          tasks: [
+            "Built and maintained web applications using Vue.js",
+            "Collaborated with back-end developers to integrate APIs",
+            "Designed and implemented responsive UI/UX",
+          ],
+        },
+        experienceList: {
+          title: "后台管理系统项目",
+          company: "前端开发工程师",
+          date: "2022.09-2022.12",
+          tasks: [
+            "Built and maintained web applications using Vue.js",
+            "Collaborated with back-end developers to integrate APIs",
+            "Designed and implemented responsive UI/UX",
+          ],
+        },
+        educationList: {
+          school: "浙江大学（本科）",
+          degree: "软件技术",
+          date: "2016.09-2020.07",
+        }
+      }, // 模板数据
+      companyList: [], // 工作经历
+      experienceList: [], // 项目经历
+      educationList: [], // 教育经历
+      dragIndex: '',
+      enterIndex: '',
+      card: {
+        summary: 2,
+        company: 2,
+        experience: 2,
+        education: 2
+      }
+    };
+  },
+  created () {
+    this.init()
+  },
+  methods: {
+    // 初始化数据
+    init () {
+      this.handleAdd({
+        name: 'companyList'
+      })
+      this.handleAdd({
+        name: 'experienceList'
+      })
+      this.handleAdd({
+        name: 'educationList'
+      })
+    },
+    // 拖拽个人信息顺序
+    dragstart (index) {
+      this.dragIndex = index;
+    },
+    dragenter (e, index) {
+      e.preventDefault();
+      // 避免源对象触发自身的dragenter事件
+      if (this.dragIndex !== index) {
+        const source = this.infoList[this.dragIndex];
+        this.infoList.splice(this.dragIndex, 1);
+        this.infoList.splice(index, 0, source);
+        // 排序变化后目标对象的索引变成源对象的索引
+        this.dragIndex = index;
+      }
+    },
+    dragover (e) {
+      e.preventDefault();
+    },
+    // 删除板块
+    handleDelete (data) {
+      console.log(data)
+      this.card[data.card] = data.num
+    },
+    // 添加板块数据
+    handleAdd (data) {
+      this[data.name].push(this.content[data.name])
+    },
+    // 添加简历照片
+    handleFileChange () {
+      const file = this.$refs.fileInput.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.imageUrl = reader.result;
+      };
+    }
+  }
+};
+</script>
+
+<style scoped>
+.resume {
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+}
+
+.header {
+  position: relative;
+}
+
+.card {
+  margin-bottom: 30px;
+}
+
+.card-title span {
+  color: #333;
+  padding: 5px 12px;
+  border-left: 2px solid #333;
+}
+
+.card-title .add {
+  opacity: 0;
+  font-size: 20px;
+  font-weight: 700;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.card-title .delete {
+  opacity: 0;
+  font-size: 20px;
+  font-weight: 700;
+  border-radius: 50%;
+  transform: rotate(45deg);
+  cursor: pointer;
+}
+
+.card-title:hover .add,
+.card-title:hover .delete {
+  opacity: 1;
+}
+
+.company-title,
+.project-title,
+.degree-title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.name {
+  margin-right: 20px;
+}
+
+.name h1 {
+  font-size: 36px;
+  margin-bottom: 15px;
+}
+
+.name h3 {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.contact {
+  flex: 1;
+}
+
+ul {
+  list-style: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.image {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  width: 100px;
+  height: 140px;
+}
+
+.image input {
+  opacity: 0;
+  width: 120px;
+}
+
+.image:hover input {
+  opacity: 1;
+}
+
+.image img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 120px;
+  height: 180px;
+}
+
+.infoList {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.infoList .infor-item {
+  cursor: move;
+  width: 33.333%;
+}
+
+.infoList .infor-item:hover {
+  color: skyblue;
+  background: #f5f7f9;
+}
+
+.infoList .infor-item span {
+  cursor: auto;
+}
+
+.infor-item span {
+  line-height: 2.5;
+}
+
+.contact li {
+  margin-bottom: 5px;
+  font-size: 16px;
+}
+
+.summary h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.summary p {
+  font-size: 16px;
+  margin: 0;
+}
+
+.experience h2,
+.education h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.projects h3 {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.company ul,
+.projects ul {
+  margin-left: 20px;
+  margin-bottom: 0;
+}
+
+.company li,
+.projects li {
+  margin-bottom: 5px;
+  font-size: 16px;
+}
+
+.degree {
+  margin-bottom: 20px;
+}
+
+.degree h3 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+</style>
