@@ -253,7 +253,7 @@
             })"
           >+</button>
         </h3>
-        <p contenteditable><span contenteditable>项目简介：</span>负责XXX\XXX\XXX的开发</p>
+        <p contenteditable><span contenteditable>项目简介：</span>该项目是一个移动端电商网站，包含商品列表、商品详情、购物车、订单结算等功能。使用Vue框架和Vant组件库实现页面的开发，使用Vuex管理状态，使用axios库进行数据交互。本人主要负责购物车和订单结算模块的开发，实现了购物车的增删改查和订单的生成和支付功能。</p>
         <p contenteditable><span contenteditable>技术栈：</span>Vue2 + Vue-Cli</p>
         <ul class="tasks">
           <li
@@ -439,9 +439,9 @@ export default {
           company: "深圳市XXX有限公司",
           title: "前端开发工程师",
           tasks: [
-            "Built and maintained web applications using Vue.js",
-            "Collaborated with back-end developers to integrate APIs",
-            "Collaborated with back-end developers to integrate APIs"
+            "参与团队的代码审核和重构，提高代码质量和可维护性。",
+            "与后台工程师配合，实现前后端数据的交互和接口的对接，使用axios库进行AJAX请求。",
+            "参与公司的技术分享，分享自己的经验和学习成果，学习其他同事的优秀经验和技能。"
           ],
         },
         experienceList: {
@@ -449,9 +449,9 @@ export default {
           company: "前端开发工程师",
           date: "2022.09-2022.12",
           tasks: [
-            "Built and maintained web applications using Vue.js",
-            "Collaborated with back-end developers to integrate APIs",
-            "Collaborated with back-end developers to integrate APIs"
+            "根据UI设计师提供的设计图，编写静态页面，完成页面排版。",
+            "解决各大浏览器的兼容问题。",
+            "与UI、产品经理等同事交流，提出可行性的建议和实施方法。"
           ],
         },
         educationList: {
@@ -567,6 +567,7 @@ export default {
 
 .name h1 {
   font-size: 36px;
+  margin-top: 20px;
   margin-bottom: 15px;
 }
 
@@ -673,7 +674,7 @@ ul {
 .skillList,
 .company ul,
 .projects ul {
-  margin-left: 20px;
+  margin-left: 22px;
   margin-bottom: 0;
 }
 
