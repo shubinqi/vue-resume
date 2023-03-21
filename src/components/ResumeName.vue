@@ -30,15 +30,17 @@
     </div>
     <!-- 个人信息 -->
     <div
-      @dragenters="dragenters($event, s)"
-      @dragovers="dragovers($event, s)"
-      @dragstarts="dragstarts(s)"
-      draggable
+      @dragenter="dragenter($event, s, 'cardList')"
+      @dragover="dragover($event, s)"
+      @dragstart="dragstart(s)"
       class="infomation card"
       v-for="(item, s) in cardList"
       :key="item.s"
     >
-      <h2 class="card-title">
+      <h2
+        class="card-title"
+        draggable
+      >
         <span contenteditable>{{ item.name }}</span>
         <button
           class="add"
@@ -61,7 +63,7 @@
       >
         <div
           class="infor-item"
-          @dragenter="dragenter($event, ss)"
+          @dragenter="dragenter($event, ss, 'infoList')"
           @dragover="dragover($event, ss)"
           @dragstart="dragstart(ss)"
           draggable
@@ -384,39 +386,25 @@ export default {
       this.dragIndex = index;
     },
     // 拖拽个人信息顺序
-    dragenter (e, index) {
+    dragenter (e, index, list) {
       e.preventDefault();
       // 避免源对象触发自身的dragenter事件
       if (this.dragIndex !== index) {
-        const source = this.infoList[this.dragIndex];
-        this.infoList.splice(this.dragIndex, 1);
-        this.infoList.splice(index, 0, source);
+        if (list === 'infoList') {
+          const source = this.infoList[this.dragIndex];
+          this.infoList.splice(this.dragIndex, 1);
+          this.infoList.splice(index, 0, source);
+        } else {
+          const source = this.cardList[this.dragIndex];
+          this.cardList.splice(this.dragIndex, 1);
+          this.cardList.splice(index, 0, source);
+        }
         // 排序变化后目标对象的索引变成源对象的索引
         this.dragIndex = index;
       }
     },
     // 拖拽个人信息顺序
     dragover (e) {
-      e.preventDefault();
-    },
-    // 拖拽个人信息顺序
-    dragstarts (index) {
-      this.dragIndexs = index;
-    },
-    // 拖拽个人信息顺序
-    dragenters (e, index) {
-      e.preventDefault();
-      // 避免源对象触发自身的dragenter事件
-      if (this.dragIndexs !== index) {
-        const source = this.cardList[this.dragIndexs];
-        this.cardList.splice(this.dragIndexs, 1);
-        this.cardList.splice(index, 0, source);
-        // 排序变化后目标对象的索引变成源对象的索引
-        this.dragIndexs = index;
-      }
-    },
-    // 拖拽个人信息顺序
-    dragovers (e) {
       e.preventDefault();
     },
     // 添加板块数据
