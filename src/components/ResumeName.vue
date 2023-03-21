@@ -44,7 +44,7 @@
           @dragstart="dragstart(index)"
           draggable
           v-for="(item, index) in infoList"
-          :key="item.id"
+          :key="item.index"
         >
           <span
             contenteditable
@@ -58,11 +58,15 @@
       </div>
     </div>
     <!-- 个人信息 -->
-    <div class="infomation card">
+    <div
+      class="infomation card"
+      v-if="card.skill === 2"
+    >
       <h2 class="card-title"><span contenteditable>专业技能</span><button
-          class="add"
-          @click="handleAdd({
-            name: 'skillList'
+          class="delete"
+          @click="handleDelete({
+            name: 'skill',
+            num: 0
           })"
         >+</button></h2>
       <ul class="skillList">
@@ -225,12 +229,18 @@
         </h3>
       </div>
     </div>
+    <template slot="a">123</template>
   </div>
 </template>
 
 <script>
+// import cardList from './card-list.vue'
+
 export default {
   name: "ResumeName",
+  // components: {
+  //   cardList
+  // },
   data () {
     return {
       name: "姓名", // 姓名
@@ -238,37 +248,28 @@ export default {
       subTitle: '男 | 25岁 | 软件技术', // 重点信息
       imageUrl: null, // 头像
       summary: '掌握Web前端开发基本技能，熟悉W3C标准、页面布局架构、前端语义化、浏览器兼容性等，懂些审美，擅长设计，重视用户体验与代码可维护性，有近2年的前端开发经验。',
-      cardList: [{
-        cardName: '个人信息'
-      }], // 个人信息
       skillList: [
         "精通 HTML+CSS，并能快速处理各浏览器兼容问题；",
         "熟练掌握 JavaScript 或 TypeScript"
       ], // 专业技能
       infoList: [{
         title: '性别：',
-        intro: '男',
-        id: 1
+        intro: '男'
       }, {
         title: '学历：',
-        intro: '本科',
-        id: 2
+        intro: '本科'
       }, {
         title: '专业：',
-        intro: '软件工程',
-        id: 3
+        intro: '软件工程'
       }, {
         title: '经验：',
-        intro: '3年',
-        id: 4
+        intro: '3年'
       }, {
         title: '电话：',
-        intro: '18888888888',
-        id: 5
+        intro: '18888888888'
       }, {
         title: '邮箱：',
-        intro: '123456@163.com',
-        id: 6
+        intro: '123456@163.com'
       }], // 个人信息
       content: {
         infoList: {
@@ -305,6 +306,7 @@ export default {
       dragIndex: '',
       enterIndex: '',
       card: {
+        skill: 2,
         summary: 2,
         company: 2,
         experience: 2,
@@ -350,7 +352,6 @@ export default {
     },
     // 删除板块
     handleDelete (data) {
-      console.log(data)
       this.card[data.card] = data.num
     },
     // 添加板块数据
@@ -359,8 +360,8 @@ export default {
     },
     // 添加子列表数据
     handleAddChildren (data) {
-      console.log(this, data)
       this[data.name][data.index].tasks.push('随便加点什么吧！')
+      console.log(this[data.name], data.index, this[data.name][data.index]);
     },
     // 添加简历照片
     handleFileChange () {
@@ -392,7 +393,7 @@ export default {
 .card-title span {
   color: #333;
   padding: 5px 12px;
-  border-left: 2px solid #333;
+  border-left: 4px solid #333;
 }
 
 .card-title .add {
@@ -535,10 +536,10 @@ ul {
   font-size: 16px;
 }
 
-.skillList li:last-child:hover .add,
-.contact li:last-child:hover .add,
-.company li:last-child:hover .add,
-.projects li:last-child:hover .add {
+.skillList li:hover .add,
+.contact li:hover .add,
+.company li:hover .add,
+.projects li:hover .add {
   opacity: 1;
 }
 
