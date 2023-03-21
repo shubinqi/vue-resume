@@ -601,6 +601,10 @@ ul {
 .image input {
   opacity: 0;
   width: 90px;
+  z-index: 2;
+  position: relative;
+  height: 140px;
+  cursor: pointer;
 }
 
 .image:hover input {
