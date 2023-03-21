@@ -1,5 +1,6 @@
 <template>
   <div class="resume">
+    <!-- 头部信息 -->
     <div class="header card">
       <div class="name">
         <h1
@@ -15,16 +16,6 @@
           v-text="subTitle"
         ></p>
       </div>
-      <!-- <div class="contact">
-        <ul>
-          <li
-            contenteditable
-            v-for="(contact, index) in contacts"
-            :key="index"
-            v-text="contact"
-          ></li>
-        </ul>
-      </div> -->
       <div class="image">
         <input
           type="file"
@@ -66,6 +57,28 @@
         </div>
       </div>
     </div>
+    <!-- 个人信息 -->
+    <div class="infomation card">
+      <h2 class="card-title"><span contenteditable>专业技能</span><button
+          class="add"
+          @click="handleAdd({
+            name: 'skillList'
+          })"
+        >+</button></h2>
+      <ul class="skillList">
+        <li
+          contenteditable
+          v-for="(item, index) in skillList"
+          :key="index"
+        >{{ item }} <button
+            class="add"
+            @click="handleAdd({
+              name: 'skillList',
+              content: '随便加点啥。'
+            })"
+          >+</button></li>
+      </ul>
+    </div>
     <!-- 自我评价 -->
     <div
       class="summary card"
@@ -89,7 +102,7 @@
       v-if="card.company === 2"
     >
       <h2 class="card-title">
-        <span>工作经历</span>
+        <span contenteditable>工作经历</span>
         <button
           class="add"
           @click="handleAdd({
@@ -128,8 +141,13 @@
             contenteditable
             v-for="(task, index) in company.tasks"
             :key="index"
-            v-text="task"
-          ></li>
+          >{{ task }} <button
+              class="add"
+              @click="handleAddChildren({
+                name: 'companyList',
+                index: index
+              })"
+            >+</button></li>
         </ul>
       </div>
     </div>
@@ -166,10 +184,15 @@
         <ul>
           <li
             contenteditable
-            v-for="(task, index) in job.tasks"
-            :key="index"
-            v-text="task"
-          ></li>
+            v-for="(task, i) in job.tasks"
+            :key="i"
+          >{{ task }} <button
+              class="add"
+              @click="handleAddChildren({
+                name: 'experienceList',
+                index: index
+              })"
+            >+</button></li>
         </ul>
       </div>
     </div>
@@ -217,7 +240,11 @@ export default {
       summary: '掌握Web前端开发基本技能，熟悉W3C标准、页面布局架构、前端语义化、浏览器兼容性等，懂些审美，擅长设计，重视用户体验与代码可维护性，有近2年的前端开发经验。',
       cardList: [{
         cardName: '个人信息'
-      }],
+      }], // 个人信息
+      skillList: [
+        "精通 HTML+CSS，并能快速处理各浏览器兼容问题；",
+        "熟练掌握 JavaScript 或 TypeScript"
+      ], // 专业技能
       infoList: [{
         title: '性别：',
         intro: '男',
@@ -254,8 +281,7 @@ export default {
           title: "前端开发工程师",
           tasks: [
             "Built and maintained web applications using Vue.js",
-            "Collaborated with back-end developers to integrate APIs",
-            "Designed and implemented responsive UI/UX",
+            "Collaborated with back-end developers to integrate APIs"
           ],
         },
         experienceList: {
@@ -264,8 +290,7 @@ export default {
           date: "2022.09-2022.12",
           tasks: [
             "Built and maintained web applications using Vue.js",
-            "Collaborated with back-end developers to integrate APIs",
-            "Designed and implemented responsive UI/UX",
+            "Collaborated with back-end developers to integrate APIs"
           ],
         },
         educationList: {
@@ -328,7 +353,12 @@ export default {
     },
     // 添加板块数据
     handleAdd (data) {
-      this[data.name].push(this.content[data.name])
+      this[data.name].push(!data.content ? this.content[data.name] : '随便加点什么吧！')
+    },
+    // 添加子列表数据
+    handleAddChildren (data) {
+      console.log(this, data)
+      this[data.name][data.index].tasks.push('随便加点什么吧！')
     },
     // 添加简历照片
     handleFileChange () {
@@ -464,11 +494,6 @@ ul {
   line-height: 2.5;
 }
 
-.contact li {
-  margin-bottom: 5px;
-  font-size: 16px;
-}
-
 .summary h2 {
   font-size: 24px;
   margin-bottom: 10px;
@@ -490,16 +515,48 @@ ul {
   margin-bottom: 5px;
 }
 
+.skillList,
 .company ul,
 .projects ul {
   margin-left: 20px;
   margin-bottom: 0;
 }
 
+.skillList li {
+  line-height: 1.8;
+}
+
+.contact li,
 .company li,
 .projects li {
   margin-bottom: 5px;
   font-size: 16px;
+}
+
+.skillList li:last-child:hover .add,
+.contact li:last-child:hover .add,
+.company li:last-child:hover .add,
+.projects li:last-child:hover .add {
+  opacity: 1;
+}
+
+.skillList li .add,
+.contact li .add,
+.company li .add,
+.projects li .add {
+  cursor: pointer;
+  opacity: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+  width: 20px;
+  height: 20px;
+  border: 0;
+  border-radius: 50%;
+  background: #ccc;
+  display: inline-block;
+  box-sizing: border-box;
 }
 
 .degree {
