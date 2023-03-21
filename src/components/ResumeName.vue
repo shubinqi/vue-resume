@@ -500,14 +500,19 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+ul {
+  list-style: auto;
+  margin: 0;
+  padding: 0;
+}
+
 .resume {
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.5;
 }
 
-.header,
-.card-title {
+.header {
   position: relative;
 }
 
@@ -515,43 +520,45 @@ export default {
   margin-bottom: 30px;
 }
 
-.card-title span {
-  color: #333;
-  padding: 5px 12px;
+.card-title {
+  position: relative;
+  span {
+    color: #333;
+    padding: 5px 12px;
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 4px;
+    height: 25px;
+    background: #333;
+  }
+  .add {
+    opacity: 0;
+    font-size: 20px;
+    font-weight: 700;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  .delete {
+    opacity: 0;
+    font-size: 20px;
+    font-weight: 700;
+    border-radius: 50%;
+    transform: rotate(45deg);
+    cursor: pointer;
+    margin-right: 5px;
+  }
 }
 
-.card-title:after {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 6px;
-  width: 4px;
-  height: 25px;
-  background: #333;
-}
-
-.card-title .add {
-  opacity: 0;
-  font-size: 20px;
-  font-weight: 700;
-  border-radius: 50%;
-  cursor: pointer;
-  margin-right: 5px;
-}
-
-.card-title .delete {
-  opacity: 0;
-  font-size: 20px;
-  font-weight: 700;
-  border-radius: 50%;
-  transform: rotate(45deg);
-  cursor: pointer;
-  margin-right: 5px;
-}
-
-.card-title:hover .add,
-.card-title:hover .delete {
-  opacity: 1;
+.card-title {
+  &:hover .add,
+  &:hover .delete {
+    opacity: 1;
+  }
 }
 
 .company-title,
@@ -563,31 +570,18 @@ export default {
 
 .name {
   margin-right: 20px;
-}
-
-.name h1 {
-  font-size: 36px;
-  margin-top: 20px;
-  margin-bottom: 15px;
-}
-
-.name h3 {
-  font-size: 22px;
-  margin-bottom: 5px;
-}
-
-.name p {
-  font-size: 18px;
-}
-
-.contact {
-  flex: 1;
-}
-
-ul {
-  list-style: auto;
-  margin: 0;
-  padding: 0;
+  h1 {
+    font-size: 36px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+  }
+  h3 {
+    font-size: 22px;
+    margin-bottom: 5px;
+  }
+  p {
+    font-size: 18px;
+  }
 }
 
 .image {
@@ -596,83 +590,78 @@ ul {
   right: 20px;
   width: 90px;
   height: 126px;
-}
-
-.image input {
-  opacity: 0;
-  width: 90px;
-  z-index: 2;
-  position: relative;
-  height: 140px;
-  cursor: pointer;
-}
-
-.image:hover input {
-  opacity: 1;
-}
-
-.image img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 90px;
-  height: 126px;
-  object-fit: cover;
+  input {
+    opacity: 0;
+    width: 90px;
+    z-index: 2;
+    position: relative;
+    height: 140px;
+    cursor: pointer;
+  }
+  &:hover input {
+    opacity: 1;
+  }
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 90px;
+    height: 126px;
+    object-fit: cover;
+  }
 }
 
 .infoList {
   display: flex;
   flex-wrap: wrap;
+  .infor-item {
+    cursor: move;
+    width: 33.333%;
+    &:hover {
+      color: skyblue;
+      background: #f5f7f9;
+    }
+    span {
+      cursor: auto;
+      line-height: 2.5;
+    }
+  }
 }
 
-.infoList .infor-item {
-  cursor: move;
-  width: 33.333%;
+.summary {
+  p {
+    font-size: 16px;
+    margin: 0;
+  }
 }
 
-.infoList .infor-item:hover {
-  color: skyblue;
-  background: #f5f7f9;
-}
-
-.infoList .infor-item span {
-  cursor: auto;
-}
-
-.infor-item span {
-  line-height: 2.5;
-}
-
-.summary p {
-  font-size: 16px;
-  margin: 0;
-}
-
-.summary h2,
-.experience h2,
-.education h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
+.summary,
+.experience,
+.education {
+  h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
 }
 
 .projects {
   margin-bottom: 25px;
+  p {
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    span {
+      font-weight: 700;
+    }
+  }
 }
 
-.projects h3,
-.company h3 {
-  font-size: 20px;
-  margin-bottom: 20px;
-}
-
-.projects p {
-  font-size: 16px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.projects p span {
-  font-weight: 700;
+.projects,
+.company {
+  h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
 }
 
 .skillList,
@@ -686,11 +675,13 @@ ul {
   line-height: 1.8;
 }
 
-.contact li,
-.company li,
-.projects li {
-  margin-bottom: 5px;
-  font-size: 16px;
+.contact,
+.company,
+.projects {
+  li {
+    margin-bottom: 5px;
+    font-size: 16px;
+  }
 }
 
 .infor-item,
@@ -701,74 +692,81 @@ ul {
   position: relative;
 }
 
-.infor-item .delete,
-.company-title .delete,
-.project-title .delete,
-.degree-title .delete,
-.tasks .delete,
-.tasks .add {
-  cursor: pointer;
-  opacity: 0;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 16px;
-  text-align: center;
-  width: 20px;
-  height: 20px;
-  margin-left: 10px;
-  border: 0;
-  border-radius: 50%;
-  background: #ccc;
-  display: inline-block;
-  box-sizing: border-box;
-  position: absolute;
+.infor-item,
+.company-title,
+.project-title,
+.degree-title,
+.tasks {
+  .delete,
+  .add {
+    cursor: pointer;
+    opacity: 0;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 16px;
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    border: 0;
+    border-radius: 50%;
+    background: #ccc;
+    display: inline-block;
+    box-sizing: border-box;
+    position: absolute;
+  }
 }
 
-.tasks .add {
-  position: absolute;
-  left: -50px;
-  top: 2px;
+.tasks {
+  .add {
+    position: absolute;
+    left: -50px;
+    top: 2px;
+  }
+  li {
+    position: relative;
+  }
+  .delete {
+    transform: rotate(45deg);
+    right: 0;
+    top: 0;
+  }
 }
 
-.tasks li {
-  position: relative;
+.infor-item {
+  .delete {
+    transform: rotate(45deg);
+    right: 6px;
+    top: 10px;
+  }
 }
 
-.tasks .delete {
-  transform: rotate(45deg);
-  right: 0;
-  top: 0;
+.degree-title,
+.company-title,
+.project-title {
+  .delete {
+    transform: rotate(45deg);
+    left: -35px;
+    top: 5px;
+  }
 }
 
-.infor-item .delete {
-  transform: rotate(45deg);
-  right: 6px;
-  top: 9px;
-}
-
-.degree-title .delete,
-.company-title .delete,
-.project-title .delete {
-  transform: rotate(45deg);
-  left: -35px;
-  top: 5px;
-}
-
-.infor-item:hover .delete,
-.degree-title:hover .delete,
-.company-title:hover .delete,
-.project-title:hover .delete,
-.tasks:hover .add,
-.tasks:hover .delete {
-  opacity: 1;
+.infor-item,
+.degree-title,
+.company-title,
+.project-title,
+.tasks {
+  &:hover .add,
+  &:hover .delete {
+    opacity: 1;
+  }
 }
 
 .degree {
   margin-bottom: 20px;
-}
-
-.degree h3 {
-  font-size: 18px;
-  margin-bottom: 5px;
+  h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
 }
 </style>
