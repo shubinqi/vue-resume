@@ -497,20 +497,16 @@ ul {
   line-height: 2.5;
 }
 
-.summary h2 {
-  font-size: 24px;
-  margin-bottom: 10px;
-}
-
 .summary p {
   font-size: 16px;
   margin: 0;
 }
 
+.summary h2,
 .experience h2,
 .education h2 {
   font-size: 24px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .projects h3 {
