@@ -401,6 +401,9 @@ export default {
         name: 'experienceList'
       })
       this.handleAdd({
+        name: 'experienceList'
+      })
+      this.handleAdd({
         name: 'educationList'
       })
     },
@@ -503,7 +506,8 @@ export default {
   line-height: 1.5;
 }
 
-.header {
+.header,
+.card-title {
   position: relative;
 }
 
@@ -514,7 +518,16 @@ export default {
 .card-title span {
   color: #333;
   padding: 5px 12px;
-  border-left: 4px solid #333;
+}
+
+.card-title:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 4px;
+  height: 25px;
+  background: #333;
 }
 
 .card-title .add {
@@ -580,13 +593,13 @@ ul {
   position: absolute;
   top: 10px;
   right: 20px;
-  width: 100px;
-  height: 140px;
+  width: 90px;
+  height: 126px;
 }
 
 .image input {
   opacity: 0;
-  width: 120px;
+  width: 90px;
 }
 
 .image:hover input {
@@ -597,8 +610,9 @@ ul {
   position: absolute;
   top: 0;
   left: 0;
-  width: 120px;
-  height: 180px;
+  width: 90px;
+  height: 126px;
+  object-fit: cover;
 }
 
 .infoList {
@@ -634,6 +648,10 @@ ul {
 .education h2 {
   font-size: 24px;
   margin-bottom: 20px;
+}
+
+.projects {
+  margin-bottom: 25px;
 }
 
 .projects h3,
@@ -728,7 +746,7 @@ ul {
 .project-title .delete {
   transform: rotate(45deg);
   left: -35px;
-  top: 2px;
+  top: 5px;
 }
 
 .infor-item:hover .delete,
