@@ -30,34 +30,43 @@
     </div>
     <!-- 个人信息 -->
     <div
+      @dragenters="dragenters($event, s)"
+      @dragovers="dragovers($event, s)"
+      @dragstarts="dragstarts(s)"
+      draggable
       class="infomation card"
-      v-if="card.info === 2"
+      v-for="(item, s) in cardList"
+      :key="item.s"
     >
       <h2 class="card-title">
-        <span contenteditable>个人信息</span>
+        <span contenteditable>{{ item.name }}</span>
         <button
           class="add"
           @click="handleAdd({
-            name: 'infoList'
+            name: item.list
           })"
         >+</button>
         <button
           class="delete"
           @click="handleDelete({
-            card: 'info',
+            card: item.show,
             num: 0
           })"
         >+</button>
       </h2>
-      <div class="infoList">
+      <!-- 个人信息 -->
+      <div
+        class="infoList"
+        v-if="item.type === '1'"
+      >
         <div
           class="infor-item"
-          @dragenter="dragenter($event, index)"
-          @dragover="dragover($event, index)"
-          @dragstart="dragstart(index)"
+          @dragenter="dragenter($event, ss)"
+          @dragover="dragover($event, ss)"
+          @dragstart="dragstart(ss)"
           draggable
-          v-for="(item, index) in infoList"
-          :key="item.index"
+          v-for="(item, ss) in infoList"
+          :key="item.ss"
         >
           <span
             contenteditable
@@ -78,20 +87,11 @@
           >+</button>
         </div>
       </div>
-    </div>
-    <!-- 个人信息 -->
-    <div
-      class="infomation card"
-      v-if="card.ssss === 2"
-    >
-      <h2 class="card-title"><span contenteditable>专业技能</span><button
-          class="delete"
-          @click="handleDelete({
-            card: 'ssss',
-            num: 0
-          })"
-        >+</button></h2>
-      <ul class="skillList tasks">
+      <!-- 专业技能 -->
+      <ul
+        class="skillList tasks"
+        v-if="item.type === '2'"
+      >
         <li
           contenteditable
           v-for="(item, i) in skillList"
@@ -113,224 +113,164 @@
             })"
         >+</button>
       </ul>
-    </div>
-    <!-- 自我评价 -->
-    <div
-      class="summary card"
-      v-if="card.summary === 2"
-    >
-      <h2 class="card-title"><span contenteditable>自我评价</span><button
-          class="delete"
-          @click="handleDelete({
-            card: 'summary',
-            num: 0
-          })"
-        >+</button></h2>
+      <!-- 自我评价 -->
       <p
         contenteditable
         v-text="summary"
+        v-if="item.type === '3'"
       ></p>
-    </div>
-    <!-- 工作经历 -->
-    <div
-      class="company-card card"
-      v-if="card.company === 2"
-    >
-      <h2 class="card-title">
-        <span contenteditable>工作经历</span>
-        <button
-          class="add"
-          @click="handleAdd({
-            name: 'companyList'
-          })"
-        >+</button>
-        <button
-          class="delete"
-          @click="handleDelete({
-            card: 'company',
-            num: 0
-          })"
-        >+</button>
-      </h2>
+      <!-- 工作经历 -->
       <div
-        class="company"
-        v-for="(company, index) in companyList"
-        :key="index"
+        class="box"
+        v-if="item.type === '4'"
       >
-        <h3 class="company-title">
-          <span
-            contenteditable
-            v-text="company.company"
-          ></span>
-          <span
-            contenteditable
-            v-text="company.date"
-          ></span>
-          <span
-            contenteditable
-            v-text="company.title"
-          ></span>
-          <button
-            class="delete"
-            contenteditable="false"
-            @click="handleDeleteChildren({
-              name: 'companyList',
-              index: -10,
-              i: i
-            })"
-          >+</button>
-        </h3>
-        <ul class="tasks">
-          <li
-            contenteditable
-            v-for="(task, i) in company.tasks"
-            :key="i"
-          >{{ task }} <button
+        <div
+          class="company"
+          v-for="(company, index) in companyList"
+          :key="index"
+        >
+          <h3 class="company-title">
+            <span
+              contenteditable
+              v-text="company.company"
+            ></span>
+            <span
+              contenteditable
+              v-text="company.date"
+            ></span>
+            <span
+              contenteditable
+              v-text="company.title"
+            ></span>
+            <button
               class="delete"
               contenteditable="false"
               @click="handleDeleteChildren({
               name: 'companyList',
+              index: -10,
+              i: i
+            })"
+            >+</button>
+          </h3>
+          <ul class="tasks">
+            <li
+              contenteditable
+              v-for="(task, i) in company.tasks"
+              :key="i"
+            >{{ task }} <button
+                class="delete"
+                contenteditable="false"
+                @click="handleDeleteChildren({
+              name: 'companyList',
               index: index,
               i: i
             })"
-            >+</button></li>
-          <button
-            class="add"
-            @click="handleAddChildren({
+              >+</button></li>
+            <button
+              class="add"
+              @click="handleAddChildren({
                 name: 'companyList',
                 index: index
               })"
-          >+</button>
-        </ul>
+            >+</button>
+          </ul>
+        </div>
       </div>
-    </div>
-    <!-- 项目经历 -->
-    <div
-      class="experience card"
-      v-if="card.experience === 2"
-    >
-      <h2 class="card-title">
-        <span contenteditable>项目经历</span>
-        <button
-          class="add"
-          @click="handleAdd({
-            name: 'experienceList'
-          })"
-        >+</button>
-        <button
-          class="delete"
-          @click="handleDelete({
-            card: 'experience',
-            num: 0
-          })"
-        >+</button>
-      </h2>
+      <!-- 项目经历 -->
       <div
-        class="projects"
-        v-for="(job, index) in experienceList"
-        :key="index"
+        class="box"
+        v-if="item.type === '5'"
       >
-        <h3 class="project-title">
-          <span
-            contenteditable
-            v-text="job.title"
-          ></span>
-          <span
-            contenteditable
-            v-text="job.date"
-          ></span>
-          <span
-            contenteditable
-            v-text="job.company"
-          ></span>
-          <button
-            class="delete"
-            contenteditable="false"
-            @click="handleDeleteChildren({
-              name: 'experienceList',
-              index: -10,
-              i: i
-            })"
-          >+</button>
-        </h3>
-        <p contenteditable><span contenteditable>项目简介：</span>该项目是一个移动端电商网站，包含商品列表、商品详情、购物车、订单结算等功能。使用Vue框架和Vant组件库实现页面的开发，使用Vuex管理状态，使用axios库进行数据交互。本人主要负责购物车和订单结算模块的开发，实现了购物车的增删改查和订单的生成和支付功能。</p>
-        <p contenteditable><span contenteditable>技术栈：</span>Vue2 + Vue-Cli</p>
-        <ul class="tasks">
-          <li
-            contenteditable
-            v-for="(task, i) in job.tasks"
-            :key="i"
-          >{{ task }} <button
+        <div
+          class="projects"
+          v-for="(job, index) in experienceList"
+          :key="index"
+        >
+          <h3 class="project-title">
+            <span
+              contenteditable
+              v-text="job.title"
+            ></span>
+            <span
+              contenteditable
+              v-text="job.date"
+            ></span>
+            <span
+              contenteditable
+              v-text="job.company"
+            ></span>
+            <button
               class="delete"
               contenteditable="false"
               @click="handleDeleteChildren({
               name: 'experienceList',
+              index: -10,
+              i: i
+            })"
+            >+</button>
+          </h3>
+          <p contenteditable><span contenteditable>项目简介：</span>该项目是一个移动端电商网站，包含商品列表、商品详情、购物车、订单结算等功能。使用Vue框架和Vant组件库实现页面的开发，使用Vuex管理状态，使用axios库进行数据交互。本人主要负责购物车和订单结算模块的开发，实现了购物车的增删改查和订单的生成和支付功能。</p>
+          <p contenteditable><span contenteditable>技术栈：</span>Vue2 + Vue-Cli</p>
+          <ul class="tasks">
+            <li
+              contenteditable
+              v-for="(task, i) in job.tasks"
+              :key="i"
+            >{{ task }} <button
+                class="delete"
+                contenteditable="false"
+                @click="handleDeleteChildren({
+              name: 'experienceList',
               index: index,
               i: i
             })"
-            >+</button></li>
-          <button
-            class="add"
-            @click="handleAddChildren({
+              >+</button></li>
+            <button
+              class="add"
+              @click="handleAddChildren({
                 name: 'experienceList',
                 index: index
               })"
-          >+</button>
-        </ul>
+            >+</button>
+          </ul>
+        </div>
       </div>
-    </div>
-    <!-- 教育经历 -->
-    <div
-      class="education card"
-      v-if="card.education === 2"
-    >
-      <h2 class="card-title">
-        <span contenteditable>教育经历</span>
-        <button
-          class="add"
-          @click="handleAdd({
-            name: 'educationList'
-          })"
-        >+</button>
-        <button
-          class="delete"
-          @click="handleDelete({
-            card: 'education',
-            num: 0
-          })"
-        >+</button>
-      </h2>
+      <!-- 教育经历 -->
       <div
-        class="degree"
-        v-for="(degree, index) in educationList"
-        :key="index"
+        class="box"
+        v-if="item.type === '6'"
       >
-        <h3 class="degree-title">
-          <span
-            contenteditable
-            v-text="degree.school"
-          ></span>
-          <span
-            contenteditable
-            v-text="degree.degree"
-          ></span>
-          <span
-            contenteditable
-            v-text="degree.date"
-          ></span>
-          <button
-            class="delete"
-            contenteditable="false"
-            @click="handleDeleteChildren({
+        <div
+          class="degree"
+          v-for="(degree, index) in educationList"
+          :key="index"
+        >
+          <h3 class="degree-title">
+            <span
+              contenteditable
+              v-text="degree.school"
+            ></span>
+            <span
+              contenteditable
+              v-text="degree.degree"
+            ></span>
+            <span
+              contenteditable
+              v-text="degree.date"
+            ></span>
+            <button
+              class="delete"
+              contenteditable="false"
+              @click="handleDeleteChildren({
               name: 'educationList',
               index: -10,
               i: i
             })"
-          >+</button>
-        </h3>
+            >+</button>
+          </h3>
+        </div>
       </div>
     </div>
-    <template slot="a">123</template>
   </div>
 </template>
 
@@ -348,7 +288,38 @@ export default {
       title: "前端开发工程师", // 岗位
       subTitle: '男  |  25岁  |  软件技术  |  3年经验', // 重点信息
       imageUrl: null, // 头像
-      summary: '掌握Web前端开发基本技能，熟悉W3C标准、页面布局架构、前端语义化、浏览器兼容性等，懂些审美，擅长设计，重视用户体验与代码可维护性，有近2年的前端开发经验。',
+      summary: '掌握Web前端开发基本技能，熟悉W3C标准、页面布局架构、前端语义化、浏览器兼容性等，懂些审美，擅长设计，重视用户体验与代码可维护性，有近2年的前端开发经验。', // 自我评价
+      cardList: [{
+        name: '个人信息',
+        show: 'info',
+        list: 'infoList',
+        type: '1'
+      }, {
+        name: '专业技能',
+        show: 'ssss',
+        list: 'skillList',
+        type: '2'
+      }, {
+        name: '自我评价',
+        show: 'summary',
+        list: '',
+        type: '3'
+      }, {
+        name: '工作经历',
+        show: 'company',
+        list: 'companyList',
+        type: '4'
+      }, {
+        name: '项目经历',
+        show: 'experience',
+        list: 'experienceList',
+        type: '5'
+      }, {
+        name: '教育经历',
+        show: 'education',
+        list: 'educationList',
+        type: '6'
+      }],
       skillList: [
         "精通 HTML+CSS，并能快速处理各浏览器兼容问题；",
         "熟练掌握 JavaScript 或 TypeScript",
@@ -377,6 +348,7 @@ export default {
       experienceList: [], // 项目经历
       educationList: [], // 教育经历
       dragIndex: '',
+      dragIndexs: '',
       enterIndex: '',
       card: {
         info: 2,
@@ -425,6 +397,26 @@ export default {
     },
     // 拖拽个人信息顺序
     dragover (e) {
+      e.preventDefault();
+    },
+    // 拖拽个人信息顺序
+    dragstarts (index) {
+      this.dragIndexs = index;
+    },
+    // 拖拽个人信息顺序
+    dragenters (e, index) {
+      e.preventDefault();
+      // 避免源对象触发自身的dragenter事件
+      if (this.dragIndexs !== index) {
+        const source = this.cardList[this.dragIndexs];
+        this.cardList.splice(this.dragIndexs, 1);
+        this.cardList.splice(index, 0, source);
+        // 排序变化后目标对象的索引变成源对象的索引
+        this.dragIndexs = index;
+      }
+    },
+    // 拖拽个人信息顺序
+    dragovers (e) {
       e.preventDefault();
     },
     // 添加板块数据
