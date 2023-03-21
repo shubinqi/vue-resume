@@ -29,13 +29,26 @@
       </div>
     </div>
     <!-- 个人信息 -->
-    <div class="infomation card">
-      <h2 class="card-title"><span contenteditable>个人信息</span><button
+    <div
+      class="infomation card"
+      v-if="card.info === 2"
+    >
+      <h2 class="card-title">
+        <span contenteditable>个人信息</span>
+        <button
           class="add"
           @click="handleAdd({
             name: 'infoList'
           })"
-        >+</button></h2>
+        >+</button>
+        <button
+          class="delete"
+          @click="handleDelete({
+            card: 'info',
+            num: 0
+          })"
+        >+</button>
+      </h2>
       <div class="infoList">
         <div
           class="infor-item"
@@ -60,12 +73,12 @@
     <!-- 个人信息 -->
     <div
       class="infomation card"
-      v-if="card.skill === 2"
+      v-if="card.ssss === 2"
     >
       <h2 class="card-title"><span contenteditable>专业技能</span><button
           class="delete"
           @click="handleDelete({
-            name: 'skill',
+            card: 'ssss',
             num: 0
           })"
         >+</button></h2>
@@ -160,12 +173,22 @@
       class="experience card"
       v-if="card.experience === 2"
     >
-      <h2 class="card-title"><span contenteditable>项目经历</span><button
+      <h2 class="card-title">
+        <span contenteditable>项目经历</span>
+        <button
           class="add"
           @click="handleAdd({
             name: 'experienceList'
           })"
-        >+</button></h2>
+        >+</button>
+        <button
+          class="delete"
+          @click="handleDelete({
+            card: 'experience',
+            num: 0
+          })"
+        >+</button>
+      </h2>
       <div
         class="projects"
         v-for="(job, index) in experienceList"
@@ -201,13 +224,26 @@
       </div>
     </div>
     <!-- 教育经历 -->
-    <div class="education card">
-      <h2 class="card-title"><span contenteditable>教育经历</span><button
+    <div
+      class="education card"
+      v-if="card.education === 2"
+    >
+      <h2 class="card-title">
+        <span contenteditable>教育经历</span>
+        <button
           class="add"
           @click="handleAdd({
             name: 'educationList'
           })"
-        >+</button></h2>
+        >+</button>
+        <button
+          class="delete"
+          @click="handleDelete({
+            card: 'education',
+            num: 0
+          })"
+        >+</button>
+      </h2>
       <div
         class="degree"
         v-for="(degree, index) in educationList"
@@ -306,7 +342,8 @@ export default {
       dragIndex: '',
       enterIndex: '',
       card: {
-        skill: 2,
+        info: 2,
+        ssss: 2,
         summary: 2,
         company: 2,
         experience: 2,
