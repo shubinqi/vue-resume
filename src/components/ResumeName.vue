@@ -139,8 +139,8 @@
         <ul>
           <li
             contenteditable
-            v-for="(task, index) in company.tasks"
-            :key="index"
+            v-for="(task, i) in company.tasks"
+            :key="i"
           >{{ task }} <button
               class="add"
               @click="handleAddChildren({
@@ -332,6 +332,7 @@ export default {
     dragstart (index) {
       this.dragIndex = index;
     },
+    // 拖拽个人信息顺序
     dragenter (e, index) {
       e.preventDefault();
       // 避免源对象触发自身的dragenter事件
@@ -343,6 +344,7 @@ export default {
         this.dragIndex = index;
       }
     },
+    // 拖拽个人信息顺序
     dragover (e) {
       e.preventDefault();
     },
