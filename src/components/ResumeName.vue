@@ -67,6 +67,15 @@
             contenteditable
             v-text="item.intro"
           ></span>
+          <button
+            class="delete"
+            contenteditable="false"
+            @click="handleDeleteChildren({
+              name: 'infoList',
+              index: -10,
+              i: index
+            })"
+          >+</button>
         </div>
       </div>
     </div>
@@ -161,6 +170,15 @@
             contenteditable
             v-text="company.title"
           ></span>
+          <button
+            class="delete"
+            contenteditable="false"
+            @click="handleDeleteChildren({
+              name: 'companyList',
+              index: -10,
+              i: i
+            })"
+          >+</button>
         </h3>
         <ul class="tasks">
           <li
@@ -225,7 +243,18 @@
             contenteditable
             v-text="job.company"
           ></span>
+          <button
+            class="delete"
+            contenteditable="false"
+            @click="handleDeleteChildren({
+              name: 'experienceList',
+              index: -10,
+              i: i
+            })"
+          >+</button>
         </h3>
+        <p contenteditable><span contenteditable>项目简介：</span>负责XXX\XXX\XXX的开发</p>
+        <p contenteditable><span contenteditable>技术栈：</span>Vue2 + Vue-Cli</p>
         <ul class="tasks">
           <li
             contenteditable
@@ -289,6 +318,15 @@
             contenteditable
             v-text="degree.date"
           ></span>
+          <button
+            class="delete"
+            contenteditable="false"
+            @click="handleDeleteChildren({
+              name: 'educationList',
+              index: -10,
+              i: i
+            })"
+          >+</button>
         </h3>
       </div>
     </div>
@@ -308,12 +346,13 @@ export default {
     return {
       name: "姓名", // 姓名
       title: "前端开发工程师", // 岗位
-      subTitle: '男 | 25岁 | 软件技术', // 重点信息
+      subTitle: '男  |  25岁  |  软件技术  |  3年经验', // 重点信息
       imageUrl: null, // 头像
       summary: '掌握Web前端开发基本技能，熟悉W3C标准、页面布局架构、前端语义化、浏览器兼容性等，懂些审美，擅长设计，重视用户体验与代码可维护性，有近2年的前端开发经验。',
       skillList: [
         "精通 HTML+CSS，并能快速处理各浏览器兼容问题；",
-        "熟练掌握 JavaScript 或 TypeScript"
+        "熟练掌握 JavaScript 或 TypeScript",
+        "熟练掌握 Vue 全家桶项目的开发"
       ], // 专业技能
       infoList: [{
         title: '性别：',
@@ -519,8 +558,12 @@ export default {
 }
 
 .name h3 {
-  font-size: 20px;
+  font-size: 22px;
   margin-bottom: 5px;
+}
+
+.name p {
+  font-size: 18px;
 }
 
 .contact {
@@ -593,9 +636,20 @@ ul {
   margin-bottom: 20px;
 }
 
-.projects h3 {
+.projects h3,
+.company h3 {
   font-size: 20px;
-  margin-bottom: 5px;
+  margin-bottom: 20px;
+}
+
+.projects p {
+  font-size: 16px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.projects p span {
+  font-weight: 700;
 }
 
 .skillList,
@@ -616,10 +670,18 @@ ul {
   font-size: 16px;
 }
 
+.infor-item,
+.company-title,
+.project-title,
+.degree-title,
 .tasks {
   position: relative;
 }
 
+.infor-item .delete,
+.company-title .delete,
+.project-title .delete,
+.degree-title .delete,
 .tasks .delete,
 .tasks .add {
   cursor: pointer;
@@ -636,6 +698,7 @@ ul {
   background: #ccc;
   display: inline-block;
   box-sizing: border-box;
+  position: absolute;
 }
 
 .tasks .add {
@@ -650,11 +713,28 @@ ul {
 
 .tasks .delete {
   transform: rotate(45deg);
-  position: absolute;
   right: 0;
   top: 0;
 }
 
+.infor-item .delete {
+  transform: rotate(45deg);
+  right: 6px;
+  top: 9px;
+}
+
+.degree-title .delete,
+.company-title .delete,
+.project-title .delete {
+  transform: rotate(45deg);
+  left: -35px;
+  top: 2px;
+}
+
+.infor-item:hover .delete,
+.degree-title:hover .delete,
+.company-title:hover .delete,
+.project-title:hover .delete,
 .tasks:hover .add,
 .tasks:hover .delete {
   opacity: 1;
