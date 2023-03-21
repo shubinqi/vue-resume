@@ -67,6 +67,15 @@
             contenteditable
             v-text="item.intro"
           ></span>
+          <button
+            class="delete"
+            contenteditable="false"
+            @click="handleDeleteChildren({
+              name: 'infoList',
+              index: -10,
+              i: index
+            })"
+          >+</button>
         </div>
       </div>
     </div>
@@ -161,6 +170,15 @@
             contenteditable
             v-text="company.title"
           ></span>
+          <button
+            class="delete"
+            contenteditable="false"
+            @click="handleDeleteChildren({
+              name: 'companyList',
+              index: -10,
+              i: index
+            })"
+          >+</button>
         </h3>
         <ul class="tasks">
           <li
@@ -225,6 +243,15 @@
             contenteditable
             v-text="job.company"
           ></span>
+          <button
+            class="delete"
+            contenteditable="false"
+            @click="handleDeleteChildren({
+              name: 'companyList',
+              index: -10,
+              i: index
+            })"
+          >+</button>
         </h3>
         <ul class="tasks">
           <li
@@ -620,6 +647,9 @@ ul {
   position: relative;
 }
 
+.company-title .delete,
+.project-title .delete,
+.infor-item .delete,
 .tasks .delete,
 .tasks .add {
   cursor: pointer;
@@ -636,6 +666,7 @@ ul {
   background: #ccc;
   display: inline-block;
   box-sizing: border-box;
+  position: absolute;
 }
 
 .tasks .add {
@@ -644,18 +675,37 @@ ul {
   top: 2px;
 }
 
+.company-title,
+.project-title,
+.infor-item,
 .tasks li {
   position: relative;
 }
 
+.company-title .delete,
+.infor-item .delete,
 .tasks .delete {
   transform: rotate(45deg);
-  position: absolute;
   right: 0;
   top: 0;
 }
 
+.infor-item .delete {
+  top: 11px;
+  right: 5px;
+}
+
+.company-title .delete,
+.project-title .delete {
+  transform: rotate(45deg);
+  top: 5px;
+  left: -33px;
+}
+
 .tasks:hover .add,
+.infor-item:hover .delete,
+.company-title:hover .delete,
+.project-title:hover .delete,
 .tasks:hover .delete {
   opacity: 1;
 }
