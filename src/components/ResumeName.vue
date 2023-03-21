@@ -82,18 +82,27 @@
             num: 0
           })"
         >+</button></h2>
-      <ul class="skillList">
+      <ul class="skillList tasks">
         <li
           contenteditable
-          v-for="(item, index) in skillList"
-          :key="index"
+          v-for="(item, i) in skillList"
+          :key="i"
         >{{ item }} <button
-            class="add"
-            @click="handleAdd({
+            class="delete"
+            contenteditable="false"
+            @click="handleDeleteChildren({
+              name: 'skillList',
+              index: -10,
+              i: i
+            })"
+          >+</button></li>
+        <button
+          class="add"
+          @click="handleAdd({
               name: 'skillList',
               content: '随便加点啥。'
             })"
-          >+</button></li>
+        >+</button>
       </ul>
     </div>
     <!-- 自我评价 -->
@@ -153,18 +162,27 @@
             v-text="company.title"
           ></span>
         </h3>
-        <ul>
+        <ul class="tasks">
           <li
             contenteditable
             v-for="(task, i) in company.tasks"
             :key="i"
           >{{ task }} <button
-              class="add"
-              @click="handleAddChildren({
+              class="delete"
+              contenteditable="false"
+              @click="handleDeleteChildren({
+              name: 'companyList',
+              index: index,
+              i: i
+            })"
+            >+</button></li>
+          <button
+            class="add"
+            @click="handleAddChildren({
                 name: 'companyList',
                 index: index
               })"
-            >+</button></li>
+          >+</button>
         </ul>
       </div>
     </div>
@@ -208,18 +226,27 @@
             v-text="job.company"
           ></span>
         </h3>
-        <ul>
+        <ul class="tasks">
           <li
             contenteditable
             v-for="(task, i) in job.tasks"
             :key="i"
           >{{ task }} <button
-              class="add"
-              @click="handleAddChildren({
+              class="delete"
+              contenteditable="false"
+              @click="handleDeleteChildren({
+              name: 'experienceList',
+              index: index,
+              i: i
+            })"
+            >+</button></li>
+          <button
+            class="add"
+            @click="handleAddChildren({
                 name: 'experienceList',
                 index: index
               })"
-            >+</button></li>
+          >+</button>
         </ul>
       </div>
     </div>
@@ -307,35 +334,6 @@ export default {
         title: '邮箱：',
         intro: '123456@163.com'
       }], // 个人信息
-      content: {
-        infoList: {
-          title: '项目：',
-          intro: '项目内容'
-        },
-        companyList: {
-          date: "2022.09-2023.03",
-          company: "深圳市XXX有限公司",
-          title: "前端开发工程师",
-          tasks: [
-            "Built and maintained web applications using Vue.js",
-            "Collaborated with back-end developers to integrate APIs"
-          ],
-        },
-        experienceList: {
-          title: "后台管理系统项目",
-          company: "前端开发工程师",
-          date: "2022.09-2022.12",
-          tasks: [
-            "Built and maintained web applications using Vue.js",
-            "Collaborated with back-end developers to integrate APIs"
-          ],
-        },
-        educationList: {
-          school: "浙江大学（本科）",
-          degree: "软件技术",
-          date: "2016.09-2020.07",
-        }
-      }, // 模板数据
       companyList: [], // 工作经历
       experienceList: [], // 项目经历
       educationList: [], // 教育经历
@@ -387,18 +385,65 @@ export default {
     dragover (e) {
       e.preventDefault();
     },
-    // 删除板块
-    handleDelete (data) {
-      this.card[data.card] = data.num
-    },
     // 添加板块数据
     handleAdd (data) {
-      this[data.name].push(!data.content ? this.content[data.name] : '随便加点什么吧！')
+      const content = {
+        infoList: {
+          title: '项目：',
+          intro: '项目内容'
+        },
+        companyList: {
+          date: "2022.09-2023.03",
+          company: "深圳市XXX有限公司",
+          title: "前端开发工程师",
+          tasks: [
+            "Built and maintained web applications using Vue.js",
+            "Collaborated with back-end developers to integrate APIs",
+            "Collaborated with back-end developers to integrate APIs"
+          ],
+        },
+        experienceList: {
+          title: "后台管理系统项目",
+          company: "前端开发工程师",
+          date: "2022.09-2022.12",
+          tasks: [
+            "Built and maintained web applications using Vue.js",
+            "Collaborated with back-end developers to integrate APIs",
+            "Collaborated with back-end developers to integrate APIs"
+          ],
+        },
+        educationList: {
+          school: "浙江大学（本科）",
+          degree: "软件技术",
+          date: "2016.09-2020.07",
+        }
+      }
+      this[data.name].push(!data.content ? content[data.name] : '随便加点什么吧！')
     },
     // 添加子列表数据
     handleAddChildren (data) {
       this[data.name][data.index].tasks.push('随便加点什么吧！')
-      console.log(this[data.name], data.index, this[data.name][data.index]);
+    },
+    // 删除板块
+    handleDelete (data) {
+      this.card[data.card] = data.num
+    },
+    // 删除子列表数据
+    handleDeleteChildren (data) {
+      console.log(data, this[data.name], '111')
+      if (data.index >= 0) {
+        if (this[data.name][data.index].tasks.length === 1) {
+          alert('最少保留一个！')
+          return
+        }
+        this[data.name][data.index].tasks.splice([data.i], 1)
+      } else {
+        if (this[data.name].length === 1) {
+          alert('最少保留一个！')
+          return
+        }
+        this[data.name].splice([data.i], 1)
+      }
     },
     // 添加简历照片
     handleFileChange () {
@@ -439,6 +484,7 @@ export default {
   font-weight: 700;
   border-radius: 50%;
   cursor: pointer;
+  margin-right: 5px;
 }
 
 .card-title .delete {
@@ -448,6 +494,7 @@ export default {
   border-radius: 50%;
   transform: rotate(45deg);
   cursor: pointer;
+  margin-right: 5px;
 }
 
 .card-title:hover .add,
@@ -569,17 +616,12 @@ ul {
   font-size: 16px;
 }
 
-.skillList li:hover .add,
-.contact li:hover .add,
-.company li:hover .add,
-.projects li:hover .add {
-  opacity: 1;
+.tasks {
+  position: relative;
 }
 
-.skillList li .add,
-.contact li .add,
-.company li .add,
-.projects li .add {
+.tasks .delete,
+.tasks .add {
   cursor: pointer;
   opacity: 0;
   font-size: 14px;
@@ -588,11 +630,34 @@ ul {
   text-align: center;
   width: 20px;
   height: 20px;
+  margin-left: 10px;
   border: 0;
   border-radius: 50%;
   background: #ccc;
   display: inline-block;
   box-sizing: border-box;
+}
+
+.tasks .add {
+  position: absolute;
+  left: -50px;
+  top: 2px;
+}
+
+.tasks li {
+  position: relative;
+}
+
+.tasks .delete {
+  transform: rotate(45deg);
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.tasks:hover .add,
+.tasks:hover .delete {
+  opacity: 1;
 }
 
 .degree {
