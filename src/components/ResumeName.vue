@@ -63,13 +63,16 @@
       >
         <div
           class="infor-item"
+          v-for="(item) in infoList"
+          :key="item.ss"
+        >
+          <!-- <div
+          class="infor-item"
           @dragenter="dragenter($event, ss, 'infoList')"
           @dragover="dragover($event, ss)"
           @dragstart="dragstart(ss)"
           draggable
-          v-for="(item, ss) in infoList"
-          :key="item.ss"
-        >
+        > -->
           <span
             contenteditable
             v-text="item.title"
