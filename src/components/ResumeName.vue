@@ -720,21 +720,21 @@ ul {
   position: relative;
 }
 
-.company-title .delete,
-.infor-item .delete,
-.tasks .delete {
-  transform: rotate(45deg);
-  right: 0;
-  top: 0;
+.degree-title,
+.company-title,
+.project-title {
+  .delete {
+    transform: rotate(45deg);
+    left: -35px;
+    top: 5px;
+  }
 }
 
-.infor-item .delete {
-  top: 11px;
-  right: 5px;
-}
-
-.company-title .delete,
-.project-title .delete {
+.infor-item,
+.degree-title,
+.company-title,
+.project-title,
+.tasks {
   &:hover .add,
   &:hover .delete {
     opacity: 1;
