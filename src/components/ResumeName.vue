@@ -30,9 +30,9 @@
     </div>
     <!-- 个人信息 -->
     <div
-      @dragenter="dragenter($event, s, 'cardList')"
-      @dragover="dragover($event, s)"
-      @dragstart="dragstart(s)"
+      @dragenter="dragenter($event, s, 'dragIndexOut', 'cardList')"
+      @dragover.prevent="dragover($event, s)"
+      @dragstart="dragstart(s, 'dragIndexOut')"
       class="infomation card"
       v-for="(item, s) in cardList"
       :key="item.s"
@@ -62,15 +62,19 @@
         v-if="item.type === '1'"
       >
         <div
+          @dragenter="dragenter($event, ss, 'dragIndex', 'infoList')"
+          @dragover.prevent="dragover($event, ss)"
+          @dragstart="dragstart(ss, 'dragIndex')"
+          draggable
           class="infor-item"
-          v-for="(item) in infoList"
+          v-for="(item, ss) in infoList"
           :key="item.ss"
         >
           <!-- <div
           class="infor-item"
           @dragenter="dragenter($event, ss, 'infoList')"
           @dragover="dragover($event, ss)"
-          @dragstart="dragstart(ss)"
+          @dragstart="dragstart(ss, 'in')"
           draggable
         > -->
           <span
@@ -87,7 +91,7 @@
             @click="handleDeleteChildren({
               name: 'infoList',
               index: -10,
-              i: index
+              i: ss
             })"
           >+</button>
         </div>
@@ -352,8 +356,8 @@ export default {
       companyList: [], // 工作经历
       experienceList: [], // 项目经历
       educationList: [], // 教育经历
-      dragIndex: '',
-      dragIndexs: '',
+      dragIndex: -1, // 内层拖拽标识
+      dragIndexOut: -1, // 外层拖拽标识
       enterIndex: '',
       card: {
         info: 2,
@@ -385,26 +389,21 @@ export default {
       })
     },
     // 拖拽个人信息顺序
-    dragstart (index) {
-      this.dragIndex = index;
+    dragstart (index, type) {
+      console.log(this[type], index)
+      this[type] = index;
     },
     // 拖拽个人信息顺序
-    dragenter (e, index, list) {
-      e.preventDefault();
+    dragenter (e, index, dragIndex, list) {
       // 避免源对象触发自身的dragenter事件
-      if (this.dragIndex !== index) {
-        if (list === 'infoList') {
-          const source = this.infoList[this.dragIndex];
-          this.infoList.splice(this.dragIndex, 1);
-          this.infoList.splice(index, 0, source);
-        } else {
-          const source = this.cardList[this.dragIndex];
-          this.cardList.splice(this.dragIndex, 1);
-          this.cardList.splice(index, 0, source);
-        }
-        // 排序变化后目标对象的索引变成源对象的索引
-        this.dragIndex = index;
+      e.preventDefault();
+      if (this[dragIndex] !== index) {
+        const source = this[list][this[dragIndex]];
+        this[list].splice(this[dragIndex], 1);
+        this[list].splice(index, 0, source);
       }
+      // 排序变化后目标对象的索引变成源对象的索引
+      this[dragIndex] = index;
     },
     // 拖拽个人信息顺序
     dragover (e) {
@@ -455,7 +454,6 @@ export default {
     },
     // 删除子列表数据
     handleDeleteChildren (data) {
-      console.log(data, this[data.name], '111')
       if (data.index >= 0) {
         if (this[data.name][data.index].tasks.length === 1) {
           alert('最少保留一个！')
@@ -505,6 +503,7 @@ ul {
 
 .card-title {
   position: relative;
+  cursor: move;
   span {
     color: #333;
     padding: 5px 12px;
