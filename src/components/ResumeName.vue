@@ -723,6 +723,14 @@ ul {
   position: relative;
 }
 
+.infor-item {
+  .delete {
+    transform: rotate(45deg);
+    right: 6px;
+    top: 10px;
+  }
+}
+
 .degree-title,
 .company-title,
 .project-title {
