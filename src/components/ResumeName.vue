@@ -30,34 +30,45 @@
     </div>
     <!-- 个人信息 -->
     <div
+      @dragenter="dragenter($event, s, 'cardList')"
+      @dragover="dragover($event, s)"
+      @dragstart="dragstart(s)"
       class="infomation card"
-      v-if="card.info === 2"
+      v-for="(item, s) in cardList"
+      :key="item.s"
     >
-      <h2 class="card-title">
-        <span contenteditable>个人信息</span>
+      <h2
+        class="card-title"
+        draggable
+      >
+        <span contenteditable>{{ item.name }}</span>
         <button
           class="add"
           @click="handleAdd({
-            name: 'infoList'
+            name: item.list
           })"
         >+</button>
         <button
           class="delete"
           @click="handleDelete({
-            card: 'info',
+            card: item.show,
             num: 0
           })"
         >+</button>
       </h2>
-      <div class="infoList">
+      <!-- 个人信息 -->
+      <div
+        class="infoList"
+        v-if="item.type === '1'"
+      >
         <div
           class="infor-item"
-          @dragenter="dragenter($event, index)"
-          @dragover="dragover($event, index)"
-          @dragstart="dragstart(index)"
+          @dragenter="dragenter($event, ss, 'infoList')"
+          @dragover="dragover($event, ss)"
+          @dragstart="dragstart(ss)"
           draggable
-          v-for="(item, index) in infoList"
-          :key="item.index"
+          v-for="(item, ss) in infoList"
+          :key="item.ss"
         >
           <span
             contenteditable
@@ -78,20 +89,11 @@
           >+</button>
         </div>
       </div>
-    </div>
-    <!-- 个人信息 -->
-    <div
-      class="infomation card"
-      v-if="card.ssss === 2"
-    >
-      <h2 class="card-title"><span contenteditable>专业技能</span><button
-          class="delete"
-          @click="handleDelete({
-            card: 'ssss',
-            num: 0
-          })"
-        >+</button></h2>
-      <ul class="skillList tasks">
+      <!-- 专业技能 -->
+      <ul
+        class="skillList tasks"
+        v-if="item.type === '2'"
+      >
         <li
           contenteditable
           v-for="(item, i) in skillList"
@@ -113,213 +115,164 @@
             })"
         >+</button>
       </ul>
-    </div>
-    <!-- 自我评价 -->
-    <div
-      class="summary card"
-      v-if="card.summary === 2"
-    >
-      <h2 class="card-title"><span contenteditable>自我评价</span><button
-          class="delete"
-          @click="handleDelete({
-            card: 'summary',
-            num: 0
-          })"
-        >+</button></h2>
+      <!-- 自我评价 -->
       <p
         contenteditable
         v-text="summary"
+        v-if="item.type === '3'"
       ></p>
-    </div>
-    <!-- 工作经历 -->
-    <div
-      class="company-card card"
-      v-if="card.company === 2"
-    >
-      <h2 class="card-title">
-        <span contenteditable>工作经历</span>
-        <button
-          class="add"
-          @click="handleAdd({
-            name: 'companyList'
-          })"
-        >+</button>
-        <button
-          class="delete"
-          @click="handleDelete({
-            card: 'company',
-            num: 0
-          })"
-        >+</button>
-      </h2>
+      <!-- 工作经历 -->
       <div
-        class="company"
-        v-for="(company, index) in companyList"
-        :key="index"
+        class="box"
+        v-if="item.type === '4'"
       >
-        <h3 class="company-title">
-          <span
-            contenteditable
-            v-text="company.company"
-          ></span>
-          <span
-            contenteditable
-            v-text="company.date"
-          ></span>
-          <span
-            contenteditable
-            v-text="company.title"
-          ></span>
-          <button
-            class="delete"
-            contenteditable="false"
-            @click="handleDeleteChildren({
-              name: 'companyList',
-              index: -10,
-              i: index
-            })"
-          >+</button>
-        </h3>
-        <ul class="tasks">
-          <li
-            contenteditable
-            v-for="(task, i) in company.tasks"
-            :key="i"
-          >{{ task }} <button
+        <div
+          class="company"
+          v-for="(company, index) in companyList"
+          :key="index"
+        >
+          <h3 class="company-title">
+            <span
+              contenteditable
+              v-text="company.company"
+            ></span>
+            <span
+              contenteditable
+              v-text="company.date"
+            ></span>
+            <span
+              contenteditable
+              v-text="company.title"
+            ></span>
+            <button
               class="delete"
               contenteditable="false"
               @click="handleDeleteChildren({
               name: 'companyList',
+              index: -10,
+              i: i
+            })"
+            >+</button>
+          </h3>
+          <ul class="tasks">
+            <li
+              contenteditable
+              v-for="(task, i) in company.tasks"
+              :key="i"
+            >{{ task }} <button
+                class="delete"
+                contenteditable="false"
+                @click="handleDeleteChildren({
+              name: 'companyList',
               index: index,
               i: i
             })"
-            >+</button></li>
-          <button
-            class="add"
-            @click="handleAddChildren({
+              >+</button></li>
+            <button
+              class="add"
+              @click="handleAddChildren({
                 name: 'companyList',
                 index: index
               })"
-          >+</button>
-        </ul>
+            >+</button>
+          </ul>
+        </div>
       </div>
-    </div>
-    <!-- 项目经历 -->
-    <div
-      class="experience card"
-      v-if="card.experience === 2"
-    >
-      <h2 class="card-title">
-        <span contenteditable>项目经历</span>
-        <button
-          class="add"
-          @click="handleAdd({
-            name: 'experienceList'
-          })"
-        >+</button>
-        <button
-          class="delete"
-          @click="handleDelete({
-            card: 'experience',
-            num: 0
-          })"
-        >+</button>
-      </h2>
+      <!-- 项目经历 -->
       <div
-        class="projects"
-        v-for="(job, index) in experienceList"
-        :key="index"
+        class="box"
+        v-if="item.type === '5'"
       >
-        <h3 class="project-title">
-          <span
-            contenteditable
-            v-text="job.title"
-          ></span>
-          <span
-            contenteditable
-            v-text="job.date"
-          ></span>
-          <span
-            contenteditable
-            v-text="job.company"
-          ></span>
-          <button
-            class="delete"
-            contenteditable="false"
-            @click="handleDeleteChildren({
-              name: 'companyList',
-              index: -10,
-              i: index
-            })"
-          >+</button>
-        </h3>
-        <ul class="tasks">
-          <li
-            contenteditable
-            v-for="(task, i) in job.tasks"
-            :key="i"
-          >{{ task }} <button
+        <div
+          class="projects"
+          v-for="(job, index) in experienceList"
+          :key="index"
+        >
+          <h3 class="project-title">
+            <span
+              contenteditable
+              v-text="job.title"
+            ></span>
+            <span
+              contenteditable
+              v-text="job.date"
+            ></span>
+            <span
+              contenteditable
+              v-text="job.company"
+            ></span>
+            <button
               class="delete"
               contenteditable="false"
               @click="handleDeleteChildren({
               name: 'experienceList',
+              index: -10,
+              i: i
+            })"
+            >+</button>
+          </h3>
+          <p contenteditable><span contenteditable>项目简介：</span>该项目是一个移动端电商网站，包含商品列表、商品详情、购物车、订单结算等功能。使用Vue框架和Vant组件库实现页面的开发，使用Vuex管理状态，使用axios库进行数据交互。本人主要负责购物车和订单结算模块的开发，实现了购物车的增删改查和订单的生成和支付功能。</p>
+          <p contenteditable><span contenteditable>技术栈：</span>Vue2 + Vue-Cli</p>
+          <ul class="tasks">
+            <li
+              contenteditable
+              v-for="(task, i) in job.tasks"
+              :key="i"
+            >{{ task }} <button
+                class="delete"
+                contenteditable="false"
+                @click="handleDeleteChildren({
+              name: 'experienceList',
               index: index,
               i: i
             })"
-            >+</button></li>
-          <button
-            class="add"
-            @click="handleAddChildren({
+              >+</button></li>
+            <button
+              class="add"
+              @click="handleAddChildren({
                 name: 'experienceList',
                 index: index
               })"
-          >+</button>
-        </ul>
+            >+</button>
+          </ul>
+        </div>
       </div>
-    </div>
-    <!-- 教育经历 -->
-    <div
-      class="education card"
-      v-if="card.education === 2"
-    >
-      <h2 class="card-title">
-        <span contenteditable>教育经历</span>
-        <button
-          class="add"
-          @click="handleAdd({
-            name: 'educationList'
-          })"
-        >+</button>
-        <button
-          class="delete"
-          @click="handleDelete({
-            card: 'education',
-            num: 0
-          })"
-        >+</button>
-      </h2>
+      <!-- 教育经历 -->
       <div
-        class="degree"
-        v-for="(degree, index) in educationList"
-        :key="index"
+        class="box"
+        v-if="item.type === '6'"
       >
-        <h3 class="degree-title">
-          <span
-            contenteditable
-            v-text="degree.school"
-          ></span>
-          <span
-            contenteditable
-            v-text="degree.degree"
-          ></span>
-          <span
-            contenteditable
-            v-text="degree.date"
-          ></span>
-        </h3>
+        <div
+          class="degree"
+          v-for="(degree, index) in educationList"
+          :key="index"
+        >
+          <h3 class="degree-title">
+            <span
+              contenteditable
+              v-text="degree.school"
+            ></span>
+            <span
+              contenteditable
+              v-text="degree.degree"
+            ></span>
+            <span
+              contenteditable
+              v-text="degree.date"
+            ></span>
+            <button
+              class="delete"
+              contenteditable="false"
+              @click="handleDeleteChildren({
+              name: 'educationList',
+              index: -10,
+              i: i
+            })"
+            >+</button>
+          </h3>
+        </div>
       </div>
     </div>
-    <template slot="a">123</template>
   </div>
 </template>
 
@@ -335,12 +288,44 @@ export default {
     return {
       name: "姓名", // 姓名
       title: "前端开发工程师", // 岗位
-      subTitle: '男 | 25岁 | 软件技术', // 重点信息
+      subTitle: '男  |  25岁  |  软件技术  |  3年经验', // 重点信息
       imageUrl: null, // 头像
-      summary: '掌握Web前端开发基本技能，熟悉W3C标准、页面布局架构、前端语义化、浏览器兼容性等，懂些审美，擅长设计，重视用户体验与代码可维护性，有近2年的前端开发经验。',
+      summary: '掌握Web前端开发基本技能，熟悉W3C标准、页面布局架构、前端语义化、浏览器兼容性等，懂些审美，擅长设计，重视用户体验与代码可维护性，有近2年的前端开发经验。', // 自我评价
+      cardList: [{
+        name: '个人信息',
+        show: 'info',
+        list: 'infoList',
+        type: '1'
+      }, {
+        name: '专业技能',
+        show: 'ssss',
+        list: 'skillList',
+        type: '2'
+      }, {
+        name: '自我评价',
+        show: 'summary',
+        list: '',
+        type: '3'
+      }, {
+        name: '工作经历',
+        show: 'company',
+        list: 'companyList',
+        type: '4'
+      }, {
+        name: '项目经历',
+        show: 'experience',
+        list: 'experienceList',
+        type: '5'
+      }, {
+        name: '教育经历',
+        show: 'education',
+        list: 'educationList',
+        type: '6'
+      }],
       skillList: [
         "精通 HTML+CSS，并能快速处理各浏览器兼容问题；",
-        "熟练掌握 JavaScript 或 TypeScript"
+        "熟练掌握 JavaScript 或 TypeScript",
+        "熟练掌握 Vue 全家桶项目的开发"
       ], // 专业技能
       infoList: [{
         title: '性别：',
@@ -365,6 +350,7 @@ export default {
       experienceList: [], // 项目经历
       educationList: [], // 教育经历
       dragIndex: '',
+      dragIndexs: '',
       enterIndex: '',
       card: {
         info: 2,
@@ -389,6 +375,9 @@ export default {
         name: 'experienceList'
       })
       this.handleAdd({
+        name: 'experienceList'
+      })
+      this.handleAdd({
         name: 'educationList'
       })
     },
@@ -397,13 +386,19 @@ export default {
       this.dragIndex = index;
     },
     // 拖拽个人信息顺序
-    dragenter (e, index) {
+    dragenter (e, index, list) {
       e.preventDefault();
       // 避免源对象触发自身的dragenter事件
       if (this.dragIndex !== index) {
-        const source = this.infoList[this.dragIndex];
-        this.infoList.splice(this.dragIndex, 1);
-        this.infoList.splice(index, 0, source);
+        if (list === 'infoList') {
+          const source = this.infoList[this.dragIndex];
+          this.infoList.splice(this.dragIndex, 1);
+          this.infoList.splice(index, 0, source);
+        } else {
+          const source = this.cardList[this.dragIndex];
+          this.cardList.splice(this.dragIndex, 1);
+          this.cardList.splice(index, 0, source);
+        }
         // 排序变化后目标对象的索引变成源对象的索引
         this.dragIndex = index;
       }
@@ -424,9 +419,9 @@ export default {
           company: "深圳市XXX有限公司",
           title: "前端开发工程师",
           tasks: [
-            "Built and maintained web applications using Vue.js",
-            "Collaborated with back-end developers to integrate APIs",
-            "Collaborated with back-end developers to integrate APIs"
+            "参与团队的代码审核和重构，提高代码质量和可维护性。",
+            "与后台工程师配合，实现前后端数据的交互和接口的对接，使用axios库进行AJAX请求。",
+            "参与公司的技术分享，分享自己的经验和学习成果，学习其他同事的优秀经验和技能。"
           ],
         },
         experienceList: {
@@ -434,9 +429,9 @@ export default {
           company: "前端开发工程师",
           date: "2022.09-2022.12",
           tasks: [
-            "Built and maintained web applications using Vue.js",
-            "Collaborated with back-end developers to integrate APIs",
-            "Collaborated with back-end developers to integrate APIs"
+            "根据UI设计师提供的设计图，编写静态页面，完成页面排版。",
+            "解决各大浏览器的兼容问题。",
+            "与UI、产品经理等同事交流，提出可行性的建议和实施方法。"
           ],
         },
         educationList: {
@@ -485,7 +480,13 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+ul {
+  list-style: auto;
+  margin: 0;
+  padding: 0;
+}
+
 .resume {
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.5;
@@ -499,34 +500,45 @@ export default {
   margin-bottom: 30px;
 }
 
-.card-title span {
-  color: #333;
-  padding: 5px 12px;
-  border-left: 4px solid #333;
+.card-title {
+  position: relative;
+  span {
+    color: #333;
+    padding: 5px 12px;
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 4px;
+    height: 25px;
+    background: #333;
+  }
+  .add {
+    opacity: 0;
+    font-size: 20px;
+    font-weight: 700;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  .delete {
+    opacity: 0;
+    font-size: 20px;
+    font-weight: 700;
+    border-radius: 50%;
+    transform: rotate(45deg);
+    cursor: pointer;
+    margin-right: 5px;
+  }
 }
 
-.card-title .add {
-  opacity: 0;
-  font-size: 20px;
-  font-weight: 700;
-  border-radius: 50%;
-  cursor: pointer;
-  margin-right: 5px;
-}
-
-.card-title .delete {
-  opacity: 0;
-  font-size: 20px;
-  font-weight: 700;
-  border-radius: 50%;
-  transform: rotate(45deg);
-  cursor: pointer;
-  margin-right: 5px;
-}
-
-.card-title:hover .add,
-.card-title:hover .delete {
-  opacity: 1;
+.card-title {
+  &:hover .add,
+  &:hover .delete {
+    opacity: 1;
+  }
 }
 
 .company-title,
@@ -538,97 +550,104 @@ export default {
 
 .name {
   margin-right: 20px;
-}
-
-.name h1 {
-  font-size: 36px;
-  margin-bottom: 15px;
-}
-
-.name h3 {
-  font-size: 20px;
-  margin-bottom: 5px;
-}
-
-.contact {
-  flex: 1;
-}
-
-ul {
-  list-style: auto;
-  margin: 0;
-  padding: 0;
+  h1 {
+    font-size: 36px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+  }
+  h3 {
+    font-size: 22px;
+    margin-bottom: 5px;
+  }
+  p {
+    font-size: 18px;
+  }
 }
 
 .image {
   position: absolute;
   top: 10px;
   right: 20px;
-  width: 100px;
-  height: 140px;
-}
-
-.image input {
-  opacity: 0;
-  width: 120px;
-}
-
-.image:hover input {
-  opacity: 1;
-}
-
-.image img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 120px;
-  height: 180px;
+  width: 90px;
+  height: 126px;
+  input {
+    opacity: 0;
+    width: 90px;
+    z-index: 2;
+    position: relative;
+    height: 140px;
+    cursor: pointer;
+  }
+  &:hover input {
+    opacity: 1;
+  }
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 90px;
+    height: 126px;
+    object-fit: cover;
+  }
 }
 
 .infoList {
   display: flex;
   flex-wrap: wrap;
+  .infor-item {
+    cursor: move;
+    width: 33.333%;
+    &:hover {
+      color: skyblue;
+      background: #f5f7f9;
+    }
+    span {
+      cursor: auto;
+      line-height: 2.5;
+    }
+  }
 }
 
-.infoList .infor-item {
-  cursor: move;
-  width: 33.333%;
+.summary {
+  p {
+    font-size: 16px;
+    margin: 0;
+  }
 }
 
-.infoList .infor-item:hover {
-  color: skyblue;
-  background: #f5f7f9;
+.summary,
+.experience,
+.education {
+  h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
 }
 
-.infoList .infor-item span {
-  cursor: auto;
+.projects {
+  margin-bottom: 25px;
+  p {
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    span {
+      font-weight: 700;
+    }
+  }
 }
 
-.infor-item span {
-  line-height: 2.5;
-}
-
-.summary p {
-  font-size: 16px;
-  margin: 0;
-}
-
-.summary h2,
-.experience h2,
-.education h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
-.projects h3 {
-  font-size: 20px;
-  margin-bottom: 5px;
+.projects,
+.company {
+  h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
 }
 
 .skillList,
 .company ul,
 .projects ul {
-  margin-left: 20px;
+  margin-left: 22px;
   margin-bottom: 0;
 }
 
@@ -636,43 +655,62 @@ ul {
   line-height: 1.8;
 }
 
-.contact li,
-.company li,
-.projects li {
-  margin-bottom: 5px;
-  font-size: 16px;
+.contact,
+.company,
+.projects {
+  li {
+    margin-bottom: 5px;
+    font-size: 16px;
+  }
 }
 
+.infor-item,
+.company-title,
+.project-title,
+.degree-title,
 .tasks {
   position: relative;
 }
 
-.company-title .delete,
-.project-title .delete,
-.infor-item .delete,
-.tasks .delete,
-.tasks .add {
-  cursor: pointer;
-  opacity: 0;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 16px;
-  text-align: center;
-  width: 20px;
-  height: 20px;
-  margin-left: 10px;
-  border: 0;
-  border-radius: 50%;
-  background: #ccc;
-  display: inline-block;
-  box-sizing: border-box;
-  position: absolute;
+.infor-item,
+.company-title,
+.project-title,
+.degree-title,
+.tasks {
+  .delete,
+  .add {
+    cursor: pointer;
+    opacity: 0;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 16px;
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    border: 0;
+    border-radius: 50%;
+    background: #ccc;
+    display: inline-block;
+    box-sizing: border-box;
+    position: absolute;
+  }
 }
 
-.tasks .add {
-  position: absolute;
-  left: -50px;
-  top: 2px;
+.tasks {
+  .add {
+    position: absolute;
+    left: -50px;
+    top: 2px;
+  }
+  li {
+    position: relative;
+  }
+  .delete {
+    transform: rotate(45deg);
+    right: 0;
+    top: 0;
+  }
 }
 
 .company-title,
@@ -697,25 +735,17 @@ ul {
 
 .company-title .delete,
 .project-title .delete {
-  transform: rotate(45deg);
-  top: 5px;
-  left: -33px;
-}
-
-.tasks:hover .add,
-.infor-item:hover .delete,
-.company-title:hover .delete,
-.project-title:hover .delete,
-.tasks:hover .delete {
-  opacity: 1;
+  &:hover .add,
+  &:hover .delete {
+    opacity: 1;
+  }
 }
 
 .degree {
   margin-bottom: 20px;
-}
-
-.degree h3 {
-  font-size: 18px;
-  margin-bottom: 5px;
+  h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
 }
 </style>
