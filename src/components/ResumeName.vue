@@ -30,39 +30,43 @@
     </div>
     <!-- 个人信息 -->
     <div
-      @dragenter="dragenter($event, s, 'dragIndexOut', 'cardList')"
+      @dragenter.prevent="dragenter($event, s, 'dragIndexOut', 'cardList')"
       @dragover.prevent="dragover($event, s)"
       @dragstart="dragstart(s, 'dragIndexOut')"
       class="infomation card"
       v-for="(item, s) in cardList"
       :key="item.s"
     >
-      <h2
-        class="card-title"
+      <div
         draggable
+        v-if="item.type !== '0'"
       >
-        <span contenteditable>{{ item.name }}</span>
-        <button
-          class="add"
-          @click="handleAdd({
+        <h2 class="card-title">
+          <span contenteditable>{{ item.name }}</span>
+          <button
+            class="add"
+            @click="handleAdd({
             name: item.list
           })"
-        >+</button>
-        <button
-          class="delete"
-          @click="handleDelete({
+            v-if="item.type !== '3'"
+          >+</button>
+          <button
+            class="delete"
+            @click="handleDelete({
             card: item.show,
-            num: 0
+            num: '0',
+            index: s
           })"
-        >+</button>
-      </h2>
+          >+</button>
+        </h2>
+      </div>
       <!-- 个人信息 -->
       <div
         class="infoList"
         v-if="item.type === '1'"
       >
         <div
-          @dragenter="dragenter($event, ss, 'dragIndex', 'infoList')"
+          @dragenter.prevent="dragenter($event, ss, 'dragIndex', 'infoList')"
           @dragover.prevent="dragover($event, ss)"
           @dragstart="dragstart(ss, 'dragIndex')"
           draggable
@@ -395,8 +399,8 @@ export default {
     },
     // 拖拽个人信息顺序
     dragenter (e, index, dragIndex, list) {
-      // 避免源对象触发自身的dragenter事件
-      e.preventDefault();
+      // 避免源对象触发自身的 dragenter 事件
+      e.stopPropagation();
       if (this[dragIndex] !== index) {
         const source = this[list][this[dragIndex]];
         this[list].splice(this[dragIndex], 1);
@@ -407,7 +411,7 @@ export default {
     },
     // 拖拽个人信息顺序
     dragover (e) {
-      e.preventDefault();
+      e.stopPropagation();
     },
     // 添加板块数据
     handleAdd (data) {
@@ -450,7 +454,7 @@ export default {
     },
     // 删除板块
     handleDelete (data) {
-      this.card[data.card] = data.num
+      this.cardList[data.index].type = data.num
     },
     // 删除子列表数据
     handleDeleteChildren (data) {
