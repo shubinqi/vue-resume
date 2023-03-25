@@ -26,6 +26,11 @@
           :src="imageUrl"
           v-if="imageUrl"
         >
+        <button
+          class="delete"
+          v-if="imageUrl"
+          @click="handleDeleteImg()"
+        >+</button>
       </div>
     </div>
     <!-- 个人信息 -->
@@ -34,13 +39,11 @@
       @dragover.prevent="dragover($event, s)"
       @dragstart="dragstart(s, 'dragIndexOut')"
       class="infomation card"
+      draggable
       v-for="(item, s) in cardList"
       :key="item.s"
     >
-      <div
-        draggable
-        v-if="item.type !== '0'"
-      >
+      <div v-if="item.type !== '0'">
         <h2 class="card-title">
           <span contenteditable>{{ item.name }}</span>
           <button
@@ -66,21 +69,10 @@
         v-if="item.type === '1'"
       >
         <div
-          @dragenter.prevent="dragenter($event, ss, 'dragIndex', 'infoList')"
-          @dragover.prevent="dragover($event, ss)"
-          @dragstart="dragstart(ss, 'dragIndex')"
-          draggable
           class="infor-item"
           v-for="(item, ss) in infoList"
           :key="item.ss"
         >
-          <!-- <div
-          class="infor-item"
-          @dragenter="dragenter($event, ss, 'infoList')"
-          @dragover="dragover($event, ss)"
-          @dragstart="dragstart(ss, 'in')"
-          draggable
-        > -->
           <span
             contenteditable
             v-text="item.title"
@@ -121,8 +113,7 @@
         <button
           class="add"
           @click="handleAdd({
-              name: 'skillList',
-              content: '随便加点啥。'
+              name: 'skillList'
             })"
         >+</button>
       </ul>
@@ -223,7 +214,7 @@
             >+</button>
           </h3>
           <p contenteditable><span contenteditable>项目简介：</span>该项目是一个移动端电商网站，包含商品列表、商品详情、购物车、订单结算等功能。使用Vue框架和Vant组件库实现页面的开发，使用Vuex管理状态，使用axios库进行数据交互。本人主要负责购物车和订单结算模块的开发，实现了购物车的增删改查和订单的生成和支付功能。</p>
-          <p contenteditable><span contenteditable>技术栈：</span>Vue2 + Vue-Cli</p>
+          <p contenteditable><span contenteditable>项目职责：</span>负责前端页面的开发和维护，实现页面交互效果、数据绑定和动态渲染；参与项目的需求分析和设计，提出优化建议和方案；针对特殊需求进行二次开发和定制化。</p>
           <ul class="tasks">
             <li
               contenteditable
@@ -301,7 +292,7 @@ export default {
       title: "前端开发工程师", // 岗位
       subTitle: '男  |  25岁  |  软件技术  |  3年经验', // 重点信息
       imageUrl: null, // 头像
-      summary: '掌握Web前端开发基本技能，熟悉W3C标准、页面布局架构、前端语义化、浏览器兼容性等，懂些审美，擅长设计，重视用户体验与代码可维护性，有近2年的前端开发经验。', // 自我评价
+      summary: '我是一名自我驱动力强、勇于探索新技术的前端开发工程师，有着对代码和用户体验的高度热情和追求。我熟练掌握多种前端技术和工具，如HTML/CSS/JavaScript、Vue、React、Webpack、Babel等，能够根据不同项目需求选择合适的技术栈。我善于总结和分享经验，能够输出高质量的技术文档和博客。我注重代码的可维护性和性能优化，能够根据具体情况撰写高质量、易于维护和扩展的代码。我拥有较强的团队协作精神和沟通能力，能够与团队成员良好配合，提高项目的质量和效率。', // 自我评价
       cardList: [{
         name: '个人信息',
         show: 'info',
@@ -362,15 +353,7 @@ export default {
       educationList: [], // 教育经历
       dragIndex: -1, // 内层拖拽标识
       dragIndexOut: -1, // 外层拖拽标识
-      enterIndex: '',
-      card: {
-        info: 2,
-        ssss: 2,
-        summary: 2,
-        company: 2,
-        experience: 2,
-        education: 2
-      }
+      enterIndex: ''
     };
   },
   created () {
@@ -432,7 +415,7 @@ export default {
         },
         experienceList: {
           title: "后台管理系统项目",
-          company: "前端开发工程师",
+          company: "Vue2 + Element-UI",
           date: "2022.09-2022.12",
           tasks: [
             "根据UI设计师提供的设计图，编写静态页面，完成页面排版。",
@@ -444,8 +427,10 @@ export default {
           school: "浙江大学（本科）",
           degree: "软件技术",
           date: "2016.09-2020.07",
-        }
+        },
+        skillList: '随便加点什么吧！'
       }
+      console.log(!data.content, '!data.content')
       this[data.name].push(!data.content ? content[data.name] : '随便加点什么吧！')
     },
     // 添加子列表数据
@@ -480,6 +465,10 @@ export default {
       reader.onload = () => {
         this.imageUrl = reader.result;
       };
+    },
+    // 删除头像
+    handleDeleteImg () {
+      this.imageUrl = null
     }
   }
 };
@@ -495,6 +484,11 @@ ul {
 .resume {
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.5;
+  border: 5px solid #fff;
+}
+
+.resume:hover {
+  border-color: #f1f1f1;
 }
 
 .header {
@@ -503,20 +497,33 @@ ul {
 
 .card {
   margin-bottom: 30px;
+  p {
+    line-height: 1.8;
+  }
+  &:hover {
+    background: #e1f6ff;
+  }
+  &:hover .image {
+    background: #f5f7f9;
+  }
 }
 
 .card-title {
   position: relative;
+  font-size: 22px;
   cursor: move;
   span {
     color: #333;
     padding: 5px 12px;
+    &:hover {
+      cursor: auto;
+    }
   }
   &:after {
     content: '';
     position: absolute;
     left: 0;
-    top: 6px;
+    top: 4px;
     width: 4px;
     height: 25px;
     background: #333;
@@ -538,9 +545,6 @@ ul {
     cursor: pointer;
     margin-right: 5px;
   }
-}
-
-.card-title {
   &:hover .add,
   &:hover .delete {
     opacity: 1;
@@ -558,7 +562,7 @@ ul {
   margin-right: 20px;
   h1 {
     font-size: 36px;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: 15px;
   }
   h3 {
@@ -584,6 +588,9 @@ ul {
     height: 140px;
     cursor: pointer;
   }
+  &:hover {
+    background: #f5f7f9;
+  }
   &:hover input {
     opacity: 1;
   }
@@ -601,15 +608,14 @@ ul {
   display: flex;
   flex-wrap: wrap;
   .infor-item {
-    cursor: move;
     width: 33.333%;
     &:hover {
-      color: skyblue;
       background: #f5f7f9;
     }
     span {
+      display: inline-block;
       cursor: auto;
-      line-height: 2.5;
+      line-height: 2.2;
     }
   }
 }
@@ -650,11 +656,17 @@ ul {
   }
 }
 
-.skillList,
-.company ul,
-.projects ul {
-  margin-left: 22px;
+.skillList {
+  margin-left: 25px;
   margin-bottom: 0;
+}
+
+.company,
+.projects {
+  ul {
+    margin-left: 25px;
+    margin-bottom: 0;
+  }
 }
 
 .skillList li {
@@ -678,6 +690,7 @@ ul {
   position: relative;
 }
 
+.image,
 .infor-item,
 .company-title,
 .project-title,
@@ -744,6 +757,17 @@ ul {
   }
 }
 
+.image {
+  .delete {
+    z-index: 999;
+    transform: rotate(45deg);
+    left: 50%;
+    margin-left: -12px;
+    bottom: 5px;
+  }
+}
+
+.image,
 .infor-item,
 .degree-title,
 .company-title,
